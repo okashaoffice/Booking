@@ -31,13 +31,6 @@ function AdminPanel({ handleLogout }) {
         id: doc.id,
         ...doc.data(),
       }));
-      // addNotification({
-      //   title: "New Booking Added",
-      //   message: `new Booking was recived
-      //   `,
-      //   duration: 4000,
-      //   native: true,
-      // });
       setFetchData(newBooking);
       setLoading(false);
     });
