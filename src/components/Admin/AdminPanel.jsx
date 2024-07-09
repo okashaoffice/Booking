@@ -288,7 +288,9 @@ function AdminPanel({ handleLogout }) {
                             : filteredData.map((data) => (
                                 <tr key={data.id}>
                                   <td className="whitespace-nowrap px-4 text-center py-4">
-                                    {data.resturant}
+                                    {data.resturant
+                                      ? data.resturant
+                                      : data.restaurant}
                                   </td>
                                   <td className="whitespace-nowrap px-4 text-center py-4">
                                     {data.name}
