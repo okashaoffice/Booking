@@ -18,7 +18,7 @@ import { useRef } from "react";
 import emailjs from "@emailjs/browser";
 function AdminPanel({ handleLogout }) {
   const [fetchData, setFetchData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showResponseForm, setShowResponseForm] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [filterPopup, setFilterPopup] = useState(false);
