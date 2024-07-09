@@ -16,7 +16,6 @@ import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import emailjs from "@emailjs/browser";
-import addNotification from "react-push-notification";
 function AdminPanel({ handleLogout }) {
   const [fetchData, setFetchData] = useState([]);
   const [loading, setLoading] = useState(false);
