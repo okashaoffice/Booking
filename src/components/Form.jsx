@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../config/FirebaseConfig";
-import Resturants from "./Resturants";
 const Fields = [
   { label: "Name", type: "text", id: "name" },
   { label: "Email", type: "email", id: "email" },
   { label: "Phone Number", type: "tel", id: "phone" },
   { label: "Persons", type: "number", id: "persons" },
   { label: "Date", type: "date", id: "date" },
-  { label: "Time", type: "time", id: "time" },
+  { label: "Time", type: "text", id: "time" },
 ];
 
 function Form({ isOpen, onClose, selectedRestaurant }) {
@@ -19,8 +18,9 @@ function Form({ isOpen, onClose, selectedRestaurant }) {
     phone: "",
     persons: "",
     date: "",
-    time: "",
+    time: "", 
     note: "",
+    period: "AM",
   });
   const response = false;
   const handleInputChange = (e) => {
@@ -33,25 +33,34 @@ function Form({ isOpen, onClose, selectedRestaurant }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formattedTime = `${formData.time} ${formData.period}`;
       await setDoc(doc(db, "bookings", formData.email), {
-        resturant: selectedRestaurant,
+        restaurant: selectedRestaurant,
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         persons: parseInt(formData.persons),
         date: formData.date,
-        time: formData.time,
+        time: formattedTime,
         note: formData.note,
         response: response,
       });
       alert("Booking Request Sent Successfully");
       console.log("Form data successfully sent to Firestore!");
       onClose();
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        persons: "",
+        date: "",
+        time: "",
+        note: "",
+        period: "AM", 
+      });
     } catch (error) {
       console.error("Error adding document: ", error);
     }
-    onClose();
-    setFormData("");
   };
 
   if (!isOpen) return null;
@@ -78,15 +87,37 @@ function Form({ isOpen, onClose, selectedRestaurant }) {
                   >
                     {data.label}
                   </label>
-                  <input
-                    type={data.type}
-                    required
-                    id={data.id}
-                    name={data.id}
-                    value={formData[data.id]}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full px-3 py-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
+                  {data.id === "time" ? (
+                    <div className="flex">
+                      <input
+                        type="time"
+                        id={data.id}
+                        name={data.id}
+                        value={formData[data.id]}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full px-3 py-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      />
+                      <select
+                        name="period"
+                        value={formData.period}
+                        onChange={handleInputChange}
+                        className="mt-1 ml-2 block px-3 py-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      >
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                      </select>
+                    </div>
+                  ) : (
+                    <input
+                      type={data.type}
+                      required
+                      id={data.id}
+                      name={data.id}
+                      value={formData[data.id]}
+                      onChange={handleInputChange}
+                      className="mt-1 block w-full px-3 py-2  border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    />
+                  )}
                 </div>
               ))}
             </div>
